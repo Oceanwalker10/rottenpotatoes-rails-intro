@@ -36,14 +36,14 @@ class MoviesController < ApplicationController
           @rating = session[:ratings]
           redirect = true
       else
-          @rating = @all_ratings
+          @rating = Hash[@all_ratings.map {|rating| [rating, rating]}]
       end
       
       if redirect
           redirect_to movies_path(sort: @sort, ratings: @rating)
       end
       
-     if params[:ratings] and params[:sort]
+     if @sort and @rating
           @movies = Movie.ratings_filter(@rating)
           @movies = Movie.sort_on(@sort, @movies)
       elsif @rating
