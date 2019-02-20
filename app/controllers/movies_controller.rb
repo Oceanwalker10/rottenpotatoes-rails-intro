@@ -36,8 +36,7 @@ class MoviesController < ApplicationController
           @rating = session[:ratings]
           redirect = true
       else
-          @ratings = @all_ratings
-          @movies = Movie.ratings_filter(@rating)
+          @rating = @all_ratings
       end
       
       if redirect
