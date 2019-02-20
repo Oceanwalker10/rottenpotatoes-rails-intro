@@ -13,29 +13,54 @@ class MoviesController < ApplicationController
   def index
       @movies = Movie.all
       @all_ratings = Movie.all_ratings
-      @ratings_filter = params[:ratings]
+      redirect = false
       
       
-      # filter according to the rating 
+      if params[:sort]
+          @sort = params[:sort]
+          session[:sort] = params[:sort]
+          #@movies = Movie.sort_on(@sort, @movies)
+      elsif session[:sort]
+          flash.keep
+          @sort = session[:sort]
+          redirect = true
+      end
+      
+      
       if params[:ratings]
-          @movies=Movie.where(rating: params[:ratings].keys)
+          @rating = params[:ratings]
+          session[:ratings] = params[:ratings]
+          #@movies = Movie.ratings_filter(@rating)
+      elsif session[:ratings]
+          flash.keep
+          @rating = session[:ratings]
+          redirect = true
+      else
+          @ratings = @all_ratings
+      end
+      
+      if redirect
+          redirect_to movies_path(sort: @sort, ratings: @rating)
+          flash[session[:sort]] = 'hilite'
+      end
+      
+     if params[:ratings] and params[:sort]
+          @movies = Movie.ratings_filter(@rating)
+          @movies = Movie.sort_on(@sort, @movies)
+      elsif @rating
+          @movies = Movie.ratings_filter(@rating)
+      elsif @sort
+          @movies = Movie.sort_on(@sort, @movies)
       else
           @movies = Movie.all
       end
-          
-      # sort title
-      if params[:sort] == "title"
-          @movies = @movies.sort do |a,b|
-              a.title <=> b.title
-          end
-          @title_header_style = "hilite"
-      elsif params[:sort] == "release_date"
-          @movies = @movies.sort do |a,b|
-              a.release_date <=> b.release_date
-          end
-          @release_date_style = "hilite"
+      
+      if !@ratings_filter
+          @ratings_filter = Hash.new
       end
-        
+
+          
+      
   end
 
   def new
