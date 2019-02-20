@@ -19,7 +19,6 @@ class MoviesController < ApplicationController
       if params[:sort]
           @sort = params[:sort]
           session[:sort] = params[:sort]
-          #@movies = Movie.sort_on(@sort, @movies)
       elsif session[:sort]
           flash.keep
           @sort = session[:sort]
@@ -30,7 +29,6 @@ class MoviesController < ApplicationController
       if params[:ratings]
           @rating = params[:ratings]
           session[:ratings] = params[:ratings]
-          #@movies = Movie.ratings_filter(@rating)
       elsif session[:ratings]
           flash.keep
           @rating = session[:ratings]
