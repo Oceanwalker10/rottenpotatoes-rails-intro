@@ -41,7 +41,6 @@ class MoviesController < ApplicationController
       
       if redirect
           redirect_to movies_path(sort: @sort, ratings: @rating)
-          flash[session[:sort]] = 'hilite'
       end
       
      if params[:ratings] and params[:sort]
@@ -55,11 +54,11 @@ class MoviesController < ApplicationController
           @movies = Movie.all
       end
       
-      if !@ratings_filter
-          @ratings_filter = Hash.new
+      if @sort == 'title'
+         @title_highlight = 'hilite'
+      elsif @sort == 'release_date'
+         @release_date_highlight = 'hilite'
       end
-
-          
       
   end
 
