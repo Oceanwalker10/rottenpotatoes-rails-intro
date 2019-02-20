@@ -37,6 +37,7 @@ class MoviesController < ApplicationController
           redirect = true
       else
           @ratings = @all_ratings
+          @movies = Movie.ratings_filter(@rating)
       end
       
       if redirect
